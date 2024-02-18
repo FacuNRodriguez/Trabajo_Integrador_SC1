@@ -69,3 +69,14 @@ plot(t,u)
 hold on;
 plot(t,y)
 grid on;
+
+%Diseño del compensador PID
+d = [1 1.778 13.47];
+Td=1/d(2); 
+Ti=1/(d(3)*Td); 
+Kp=1;
+
+PID = tf(Kp*[Ti*Td Ti 1],[Ti 0])
+rlocus(PID*FTLA);
+step(FTLC,feedback(0.0937*PID*FTLA,1)
+legend('Sist. Lazo cerrado sin compensar', 'Sist. lazo cerrado compensado')
