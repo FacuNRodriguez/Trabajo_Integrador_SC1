@@ -43,22 +43,7 @@ k = .3/(wn^2*It)
 
 FT = (k*wn^2)/(s^2+2*cita*wn*s+wn^2)
 
-%Errores en regimen permanente
-%Kp error de posicion
-%Kv error de velocidad
-%Ka error de aceleracion
 
-Kp=FTLA;
-Kv=simplify(s*FTLA); 
-Ka=simplify(s^2*FTLA);
-s = 0;
-
-eval(Kp)
-eval(Kv)
-eval(Ka)
-
-% Error para las distintas entradas
-ess_e=eval(1/(1+Kp)) 
 
 %Comparacion de la respuesta del sistema ante un escalon unitario
 t = 0:0.01:30; % Vector de tiempo
@@ -80,3 +65,25 @@ PID = tf(Kp*[Ti*Td Ti 1],[Ti 0])
 rlocus(PID*FTLA);
 step(FTLC,feedback(0.0937*PID*FTLA,1)
 legend('Sist. Lazo cerrado sin compensar', 'Sist. lazo cerrado compensado')
+
+%Errores en regimen permanente
+%Kp error de posicion
+%Kv error de velocidad
+%Ka error de aceleracion
+pole(PID*FTLA)
+
+clear all;
+syms s real;
+
+PID = Kp*(s^2*Ti*Td + Ti*s + 1)/Ti*s
+Kp=PID*FTLA;
+Kv=simplify(s*PID*FTLA); 
+Ka=simplify(s^2*PID*FTLA);
+s = 0;
+
+eval(Kp)
+eval(Kv)
+eval(Ka)
+
+% Error para las distintas entradas
+ess_e=eval(1/(1+Kp)) 
